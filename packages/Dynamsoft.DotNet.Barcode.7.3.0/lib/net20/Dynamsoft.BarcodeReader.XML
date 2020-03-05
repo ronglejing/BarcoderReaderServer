@@ -1,0 +1,2474 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Dynamsoft.BarcodeReader</name>
+    </assembly>
+    <members>
+        <member name="T:Dynamsoft.Barcode.BarcodeReader">
+             <summary>
+             Defines a class that provides functions for decoding barcodes in images. This is the main interface for recognizing barcodes.
+             </summary>
+             @class BarcodeReader
+             
+             Four methods are now supported for editing runtime settings - reset, initialize, append, update. 
+             - Reset runtime settings: reset all parameters in runtime setting to default value.     
+              
+             - Initialize with template: reset runtime settings firstly and replace all parameters in runtime setting with the values specified in given template regardless of the current runtime settings.   
+              
+             - Append template to runtime settings: append template and update runtime settings; the conflicting values will be assigned by the rules shown in PublicRuntimeSettings.    
+            
+             - Update with struct: update current runtime settings by the values specified in given struct directly; the parameter not be defined in struct will remain its original value.   
+            
+             @par References
+             More information about public parameters and template file can be found in file DBR_Developer's_Guide.pdf.
+            
+             @sa PublicRuntimeSettings		
+            
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+            @par Remarks:
+            The decoding result maybe unreliable without loading product key.
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+            @endcode
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.#ctor(System.String)">
+            <summary>
+            Constructor with a given product key.
+            </summary>
+            
+            @par Code Snippet:
+            @code 
+                BarcodeReader reader = new BarcodeReader("t0260NwAAAHV***************");
+            @endcode
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.#ctor(System.String,System.String)">
+            <summary>
+            Constructor with a given product key and a given path to load DLLs.
+            </summary>
+            <param name="modulePath">
+            The path where you store these DLLs .
+            </param>
+            <param name="productKey">
+            Product key.
+            </param>
+            
+            @par Code Snippet:
+            @code 
+                BarcodeReader reader = new BarcodeReader("","t0260NwAAAHV***************");
+            @endcode
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.GetRuntimeSettings">
+             <summary>
+             Gets current settings and save it into a struct.
+             </summary>
+             <returns>
+             The struct of template settings.
+             </returns>
+             <exception cref="T:Dynamsoft.Barcode.BarcodeReaderException">
+            	The exception thrown by Dynamsoft Barcode Reader.
+             </exception>
+            
+             @par Code Snippet:
+             @code
+                BarcodeReader reader = new BarcodeReader();
+                reader.ProductKeys = "t0260NwAAAHV***************";
+                PublicRuntimeSettings settings =  reader.GetRuntimeSettings();
+                reader.Dispose();
+             @endcode
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.UpdateRuntimeSettings(Dynamsoft.Barcode.PublicRuntimeSettings)">
+            <summary>
+            Update runtime settings with a given struct.
+            </summary>
+            <param name="settings">
+            The struct of template settings.
+            </param>
+            <exception cref="T:Dynamsoft.Barcode.BarcodeReaderException">
+            The exception thrown by Dynamsoft Barcode Reader.
+            </exception>
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+               PublicRuntimeSettings settings =  reader.GetRuntimeSettings();
+               settings.Timeout = 10000;
+               settings.MaxAlgorithmThreadCount = 3;
+               reader.UpdateRuntimeSettings(settings);
+               reader.Dispose();
+            @endcode
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.ResetRuntimeSettings">
+            <summary>
+            Resets all parameters to default values.
+            </summary>
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+               PublicRuntimeSettings settings =  reader.GetRuntimeSettings();
+               settings.Timeout = 10000;
+               settings.MaxAlgorithmThreadCount = 3;
+               reader.UpdateRuntimeSettings(settings);
+               reader.ResetRuntimeSettings();
+               reader.Dispose();
+            @endcode
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.SetModeArgument(System.String,System.Int32,System.String,System.String,System.String@)">
+             <summary>
+             Sets the optional argument for a specified mode in Modes parameters.
+             </summary>
+             <param name="modesName">The mode parameter name to set argument.</param>
+             <param name="index">The array index of mode parameter to indicate a specific mode.</param>
+             <param name="argumentName">The name of the argument to set.</param>
+             <param name="argumentValue">The value of the argument to set.</param>
+             <param name="errorMessage"> The error message.</param>
+             <returns>Returns error code</returns>
+             
+            
+             @par Code Snippet:
+             @code
+                BarcodeReader reader = new BarcodeReader();
+                reader.ProductKeys = "t0260NwAAAHV***************";
+                PublicRuntimeSettings settings =  reader.GetRuntimeSettings();
+                pSettings.BinarizationModes[0] = BM_LOCAL_BLOCK;
+                string errorMessage;
+                reader.UpdateRuntimeSettings(pSettings);
+                EnumErrorCode error = reader.SetModeArgument("BinarizationModes", 0, "EnableFillBinaryVacancy", "1", out errorMessage);
+                reader.Dispose();
+             @endcode
+             @par Remarks:
+             Check @ref ModesArgument for details
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.GetModeArgument(System.String,System.Int32,System.String,System.String@,System.String@)">
+             <summary>
+             Gets the optional argument for a specified mode in Modes parameters.
+             </summary>
+             <param name="modesName">The mode parameter name to get argument.</param>
+             <param name="index">The array index of mode parameter to indicate a specific mode.</param>
+             <param name="argumentName">The name of the argument to get.</param>
+             <param name="argumentValue">The value of the argument to get.</param>
+             <param name="errorMessage"> The error message.</param>
+             <returns>Returns error code</returns>
+             
+            
+             @par Code Snippet:
+             @code
+                BarcodeReader reader = new BarcodeReader();
+                reader.ProductKeys = "t0260NwAAAHV***************";
+                PublicRuntimeSettings settings =  reader.GetRuntimeSettings();
+                pSettings.BinarizationModes[0] = BM_LOCAL_BLOCK;
+                string errorMessage;
+                reader.UpdateRuntimeSettings(pSettings);
+                EnumErrorCode error = reader.SetModeArgument("BinarizationModes", 0, "EnableFillBinaryVacancy", "1", errorMessage);
+                string angumentValue;
+                EnumErrorCode error = reader.GetModeArgument("BinarizationModes", 0, "EnableFillBinaryVacancy", out angumentValue, out errorMessage);
+                reader.Dispose();
+             @endcode
+             @par Remarks:
+             Check @ref ModesArgument for details
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.InitRuntimeSettingsWithFile(System.String,Dynamsoft.Barcode.EnumConflictMode,System.String@)">
+            <summary>
+            Initialize runtime settings with the settings in given JSON file.
+            </summary>
+            <param name="jsonFileName">
+            The path of the settings file.
+            </param>
+            <param name="conflictMode">
+            The parameter setting mode, which decides to inherit parameters from previous template setting or overwrite previous settings and replace by new template.
+            </param>
+            <param name="errorMessage">
+            Output parameter storing detailed error message.
+            </param>
+            <returns>
+            Returns error code. 
+            </returns>
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+               string errorMessage;
+               EnumErrorCode error = reader.InitRuntimeSettingsWithFile(@"C:\Program Files (x86)\Dynamsoft\{Version number}\Templates\RuntimeSettings.json", EnumConflictMode.CM_OVERWRITE, out errorMessage);
+               reader.Dispose();
+            @endcode
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.InitRuntimeSettingsWithString(System.String,Dynamsoft.Barcode.EnumConflictMode,System.String@)">
+            <summary>
+            Initialize runtime settings with the settings in given JSON string.
+            </summary>
+            <param name="jsonContent">
+            A JSON string that represents the content of the settings.
+            </param>
+            <param name="conflictMode">
+            The parameter setting mode, which decides to inherit parameters from previous template setting or overwrite previous settings and replace by new template.
+            </param>
+            <param name="errorMessage">
+            Output parameter storing detailed error message.
+            </param>
+            <returns>
+            Returns error code. 
+            </returns>
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+               string errorMessage;
+               EnumErrorCode error = reader.InitRuntimeSettingsWithString("{\"Version\":\"3.0\", \"ImageParameter\":{\"Name\":\"IP1\", \"BarcodeFormatIds\":[\"BF_QR_CODE\"], \"ExpectedBarcodesCount\":10}}", EnumConflictMode.CM_OVERWRITE, out errorMessage);
+               reader.Dispose();
+            @endcode
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.AppendTplFileToRuntimeSettings(System.String,Dynamsoft.Barcode.EnumConflictMode,System.String@)">
+            <summary>
+            Append a new template file to current runtime settings.
+            </summary>
+            <param name="jsonFileName">
+            The path of the settings file.
+            </param>
+            <param name="conflictMode">
+            The parameter setting mode, which decides to inherit parameters from previous template setting or overwrite previous settings and replace by new template.
+            </param>
+            <param name="errorMessage">
+            Output parameter storing detailed error message.
+            </param>
+            <returns>
+            Returns error code. 
+            </returns>
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+               string errorMessage;
+               EnumErrorCode error = reader.AppendTplFileToRuntimeSettings(@"C:\Program Files (x86)\Dynamsoft\Barcode Reader 6.4\Templates\RuntimeSettings.json", EnumConflictMode.CM_OVERWRITE, out errorMessage);
+               reader.Dispose();
+            @endcode
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.AppendTplStringToRuntimeSettings(System.String,Dynamsoft.Barcode.EnumConflictMode,System.String@)">
+            <summary>
+            Append a new template string to current runtime settings.
+            </summary>
+            <param name="jsonContent">
+            A JSON string that represents the content of the settings.
+            </param>
+            <param name="conflictMode">
+            The parameter setting mode, which decides to inherit parameters from previous template setting or overwrite previous settings and replace by new template.
+            </param>
+            <param name="errorMessage">
+            Output parameter storing detailed error message.
+            </param>
+            <returns>
+            Returns error code. 
+            </returns>
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+               string errorMessage;
+               EnumErrorCode error = reader.AppendTplStringToRuntimeSettings("{\"Version\":\"3.0\", \"ImageParameter\":{\"Name\":\"IP1\", \"BarcodeFormatIds\":[\"BF_QR_CODE\"], \"ExpectedBarcodesCount\":10}}", EnumConflictMode.CM_IGNORE, out errorMessage);
+               reader.Dispose();
+            @endcode 
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.GetAllParameterTemplateNames">
+            <summary>
+            Gets the parameter templates name array.
+            </summary>
+            <returns>
+            The template name array.
+            </returns>
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+               string errorMessage;
+               reader.InitRuntimeSettingsWithFile(@"C:\Program Files (x86)\Dynamsoft\{Version number}\Templates\RuntimeSettings.json", EnumConflictMode.CM_OVERWRITE, out errorMessage);
+               reader.AppendTplStringToRuntimeSettings("{\"Version\":\"3.0\", \"ImageParameter\":{\"Name\":\"IP1\", \"BarcodeFormatIds\":[\"BF_QR_CODE\"], \"ExpectedBarcodesCount\":10}}", EnumConflictMode.CM_IGNORE, out errorMessage);
+               string[] templateNameArray = reader.GetAllParameterTemplateNames();
+               reader.Dispose();
+            @endcode 
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.OutputSettingsToString(System.String)">
+            <summary>
+            Outputs runtime settings to a string.
+            </summary>
+            <param name="settingsName">
+            A unique name for declaring current runtime settings.
+            </param>
+            <returns>
+            The output string which stores the contents of current settings. 
+            </returns>
+            <exception cref="T:Dynamsoft.Barcode.BarcodeReaderException">
+            The exception thrown by Dynamsoft Barcode Reader.
+            </exception>
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+               string errorMessage;
+               reader.InitRuntimeSettingsWithFile(@"C:\Program Files (x86)\Dynamsoft\{Version number}\Templates\RuntimeSettings.json", EnumConflictMode.CM_OVERWRITE, out errorMessage);
+               reader.AppendTplStringToRuntimeSettings("{\"Version\":\"3.0\", \"ImageParameter\":{\"Name\":\"IP1\", \"BarcodeFormatIds\":[\"BF_QR_CODE\"], \"ExpectedBarcodesCount\":10}}", EnumConflictMode.CM_IGNORE, out errorMessage);
+               string currentSettings = reader.OutputSettingsToString("currentRuntimeSettings");
+               reader.Dispose();
+            @endcode 
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.OutputSettingsToFile(System.String,System.String)">
+            <summary>
+            Outputs runtime settings and save it into a settings file (JSON file).
+            </summary>
+            <param name="outputFilePath">
+            The output file path which stores current settings.
+            </param>
+            <param name="settingsName">
+            A unique name for declaring current runtime settings.
+            </param>
+            <exception cref="T:Dynamsoft.Barcode.BarcodeReaderException">
+            The exception thrown by Dynamsoft Barcode Reader.
+            </exception>
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+               string errorMessage;
+               reader.InitRuntimeSettingsWithFile(@"C:\Program Files (x86)\Dynamsoft\{Version number}\Templates\RuntimeSettings.json", EnumConflictMode.CM_OVERWRITE, out errorMessage);
+               reader.AppendTplStringToRuntimeSettings("{\"Version\":\"3.0\", \"ImageParameter\":{\"Name\":\"IP1\", \"BarcodeFormatIds\":[\"BF_QR_CODE\"], \"ExpectedBarcodesCount\":10}}", EnumConflictMode.CM_IGNORE, out errorMessage);
+               reader.OutputSettingsToFile(@"C:\Program Files (x86)\Dynamsoft\{Version number}\Templates\CurrentRuntimeSettings.json", "currentRuntimeSettings");
+               reader.Dispose();
+            @endcode
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.SetErrorCallback(Dynamsoft.Barcode.CB_Error,System.IntPtr)">
+            <summary>
+            Sets call back function to process errors generated during frame decoding.
+            </summary>
+            <param name="callbackFunction">
+            Call back function.
+            </param>
+            <param name="pUser">
+            Customized arguments passed to your function.
+            </param>
+            <returns>
+            Returns error code.
+            </returns>
+            <exception cref="T:Dynamsoft.Barcode.BarcodeReaderException">
+            The exception thrown by Dynamsoft Barcode Reader.
+            </exception>
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+               reader.SetErrorCallback(ErrorFunction, NULL);
+               EnumErrorCode error = reader.StartFrameDecoding(2, 10, 1024, 720, 720, IPF_BINARY, "");
+               reader.Dispose();
+            @endcode
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.SetTextResultCallback(Dynamsoft.Barcode.CB_TextResult,System.IntPtr)">
+            <summary>
+            Sets call back function to process text results generated during frame decoding.
+            </summary>
+            <param name="callbackFunction">
+            Call back function.
+            </param>
+            <param name="pUser">
+            Customized arguments passed to your function.
+            </param>
+            <returns>
+            Returns error code.
+            </returns>
+            <exception cref="T:Dynamsoft.Barcode.BarcodeReaderException">
+            The exception thrown by Dynamsoft Barcode Reader.
+            </exception>
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+               reader.SetTextResultCallback(TextResultFunction, NULL);
+               EnumErrorCode error = reader.StartFrameDecoding(2, 10, 1024, 720, 720, IPF_BINARY, "");
+               reader.Dispose();
+            @endcode
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.SetIntermediateResultCallback(Dynamsoft.Barcode.CB_IntermediateResult,System.IntPtr)">
+            <summary>
+            Sets call back function to process intermediate results generated during frame decoding.
+            </summary>
+            <param name="callbackFunction">
+            Call back function.
+            </param>
+            <param name="pUser">
+            Customized arguments passed to your function.
+            </param>
+            <returns>
+            Returns error code.
+            </returns>
+            <exception cref="T:Dynamsoft.Barcode.BarcodeReaderException">
+            The exception thrown by Dynamsoft Barcode Reader.
+            </exception>
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+               PublicRuntimeSettings settings = new PublicRuntimeSettings();
+               settings = reader.GetRuntimeSettings();
+               settings.IntermediateResultTypes = (int)(EnumIntermediateResultType.IRT_ORIGINAL_IMAGE | EnumIntermediateResultType.IRT_COLOUR_CLUSTERED_IMAGE | EnumIntermediateResultType.IRT_COLOUR_CONVERTED_GRAYSCALE_IMAGE);
+               reader.UpdateRuntimeSettings(settings);
+               reader.SetIntermediateResultCallback(IntermediateResultFunction, NULL);
+               EnumErrorCode error = reader.StartFrameDecoding(2, 10, 1024, 720, 720, IPF_BINARY, "");
+               reader.Dispose();
+            @endcode
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.CopyMemory(System.IntPtr,System.IntPtr,System.Int32)">
+            
+            @}
+            
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.DecodeBase64String(System.String,System.String)">
+            <summary>
+            Decodes barcode from an image file encoded as a base64 string.
+            </summary>
+            <param name="base64">
+            A base64 encoded string that represents an image.
+            </param>
+            <param name="templateName">
+            The template name.
+            </param>
+            <returns>
+            All barcode text results decoded successfully.
+            </returns>
+            <exception cref="T:Dynamsoft.Barcode.BarcodeReaderException">
+            The exception thrown by Dynamsoft Barcode Reader.
+            </exception>
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+               byte[] byteFileStream = GetFileStream(@"C:\Program Files (x86)\Dynamsoft\{Version number}\Images\AllSupportedBarcodeTypes.tif");
+               string base64String = GetFileBase64String(byteFileStream);
+               TextResult[] result = reader.DecodeBase64String(base64String, "");
+               reader.Dispose();
+            @endcode
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.DecodeBitmap(System.Drawing.Bitmap,System.String)">
+            <summary>
+            Decodes barcode from a bitmap.
+            </summary>
+            <param name="bitMap">
+            The image to be decoded.
+            </param>
+            <param name="templateName">
+            The template name.
+            </param>
+            <returns>
+            All barcode text results decoded successfully.
+            </returns>
+            <exception cref="T:Dynamsoft.Barcode.BarcodeReaderException">
+            The exception thrown by Dynamsoft Barcode Reader.
+            </exception>
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+               Bitmap bBMP = new Bitmap(@"C:\Program Files (x86)\Dynamsoft\{Version number}\Images\AllSupportedBarcodeTypes.tif");
+               TextResult[] result = reader.DecodeBitmap(bBMP, "");
+               reader.Dispose();
+            @endcode
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.DecodeBuffer(System.Byte[],System.Int32,System.Int32,System.Int32,Dynamsoft.Barcode.EnumImagePixelFormat,System.String)">
+            <summary>
+            Decodes barcodes from the memory buffer containing image pixels in defined format.
+            </summary>
+            <param name="buffer">
+            The array of bytes which contain the image data.
+            </param>
+            <param name="width">
+            The width of the image in pixels.
+            </param>
+            <param name="height">
+            The height of the image in pixels.
+            </param>
+            <param name="stride">
+            The stride of the image (also called scan width).
+            </param>
+            <param name="imagePixelFormat">
+            The image pixel format used in the image byte array.
+            </param>
+            <param name="templateName">
+            The template name.
+            </param>
+            <returns>
+            All barcode text results decoded successfully.
+            </returns>
+            <exception cref="T:Dynamsoft.Barcode.BarcodeReaderException">
+            The exception thrown by Dynamsoft Barcode Reader.
+            </exception>
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+               Bitmap bBMP = new Bitmap(@"C:\Program Files (x86)\Dynamsoft\{Version number}\Images\AllSupportedBarcodeTypes.tif");
+               BitmapData bmdat = bBMP.LockBits(new Rectangle(Point.Empty, bBMP.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+               int width = bBMP.Width;
+               int height = bBMP.Height;
+               int stride = bBMP.Stride;
+               byte[] buffer = new byte[stride * bmdat.Height];
+               Marshal.Copy(bmdat.Scan0, buffer, 0, buffer.Length);
+               bBMP.UnlockBits(bmdat);
+               EnumImagePixelFormat imagePixelFormat = EnumImagePixelFormat.IPF_ARGB_8888;
+               TextResult[] result = reader.DecodeBuffer(buffer, width, height, stride, imagePixelFormat, "");
+               reader.Dispose();
+            @endcode
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.DecodeFile(System.String,System.String)">
+            <summary>
+            Decodes barcodes in a specified image file.
+            </summary>
+            <param name="fileName">
+            A string defining the file name.
+            </param>
+            <param name="templateName">
+            The template name.
+            </param>
+            <returns>
+            All barcode text results decoded successfully.
+            </returns>
+            <exception cref="T:Dynamsoft.Barcode.BarcodeReaderException">
+            The exception thrown by Dynamsoft Barcode Reader.
+            </exception>
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+               TextResult[] result = reader.DecodeFile(@"C:\Program Files (x86)\Dynamsoft\{Version number}\Images\AllSupportedBarcodeTypes.tif", "");
+               reader.Dispose();
+            @endcode
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.DecodeFileInMemory(System.Byte[],System.String)">
+            <summary>
+            Decodes barcodes from an image file in memory.
+            </summary>
+            <param name="fileStream">
+            The image file bytes in memory.
+            </param>
+            <param name="templateName">
+            The template name.
+            </param>
+            <returns>
+            All barcode text results decoded successfully.
+            </returns>
+            <exception cref="T:Dynamsoft.Barcode.BarcodeReaderException">
+            The exception thrown by Dynamsoft Barcode Reader.
+            </exception>
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+               byte[] fileStream = GetFileStream(@"C:\Program Files (x86)\Dynamsoft\{Version number}\Images\AllSupportedBarcodeTypes.tif");
+               TextResult[] result = reader.DecodeFileInMemory(fileStream, "");
+               reader.Dispose();
+            @endcode
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.InitFrameDecodingParameters">
+            <summary>
+            Init frame decoding parameters.
+            </summary>
+            <returns>Returns the frame decoding parameters.</returns>
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.StartFrameDecoding(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,Dynamsoft.Barcode.EnumImagePixelFormat,System.String)">
+            <summary>
+            Starts a new thread to decode barcodes from the inner frame queue.
+            </summary>
+            <param name="maxQueueLength">The max count of frames waiting for decoding.</param>
+            <param name="maxResultQueueLength">The max count of frames whose results (text result/localization result) will be kept for further reference.</param>
+            <param name="width">The width of the frame image in pixels.</param>
+            <param name="height">The height of the frame image in pixels.</param>
+            <param name="stride">The stride of the frame image (also called scan width).</param>
+            <param name="imagPixelFormat">The image pixel format used in the image byte array.</param>
+            <param name="templateName">The template name.</param>
+            <returns>Returns error code</returns>
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+               EnumErrorCode error = reader.StartFrameDecoding(2, 10, 1024, 720, 720, EnumImagePixelFormat.IPF_BINARY, "");
+               reader.Dispose();
+            @endcode
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.StartFrameDecodingEx(Dynamsoft.Barcode.FrameDecodingParameters@,System.String)">
+            <summary>
+            Starts a new thread to decode barcodes from the inner frame queue.
+            </summary>
+            <param name="parameters">The frame decoding parameters.</param>
+            <param name="templateName">The template name.</param>
+            <returns>Returns error code</returns>
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+               FrameDecodingParameters parameters = reader.InitFrameDecodingParameters();
+               parameters.MaxQueueLength = 3;
+               parameters.MaxResultQueueLength = 10;
+               parameters.Width = 20;
+               parameters.Height = 30;
+               parameters.Stride = 10;
+               parameters.ImagePixelFormat = EnumImagePixelFormat.IPF_GRAYSCALED;
+               parameters.Region.RegionMeasuredByPercentage = 1;
+               parameters.Region.RegionTop = 0;
+               parameters.Region.RegionBottom = 100;
+               parameters.Region.RegionLeft = 0;
+               parameters.Region.RegionRight = 100;
+               parameters.Threshold = 0.1;
+               parameters.FPS = 0;
+               EnumErrorCode error = reader.StartFrameDecodingEx(ref parameters, "");
+               reader.Dispose();
+            @endcode
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.AppendFrame(System.IntPtr)">
+            <summary>
+            Append a frame image buffer to the inner frame queue.
+            </summary>
+            <param name="pBufferBytes">The array of bytes which contain the image data.</param>
+            <returns> Returns the Id of the appended frame</returns>
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+               int ret = reader.AppendFrame(pBufferBytes);
+               reader.Dispose();
+            @endcode
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.GetLengthOfFrameQueue">
+            <summary>
+            Get current length of the inner frame queue.
+            </summary>
+            <returns>Returns the length of the inner frame queue.</returns>
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+               int frameLength = reader.GetLengthOfFrameQueue();
+               reader.Dispose();
+            @endcode
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.StopFrameDecoding">
+            <summary>
+             Stops the frame decoding thread created by StartFrameDecoding.
+            </summary>
+            <returns>Returns error code</returns>
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+               EnumErrorCode err = reader.StopFrameDecoding();
+               reader.Dispose();
+            @endcode
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.GetVersion">
+             <summary>
+             Returns the version info string for the SDK.
+             </summary>
+             <returns>
+             The version info string.
+             </returns>
+             
+             @par Code Snippet:
+             @code
+                 BarcodeReader reader = new BarcodeReader();
+                 string version = reader.GetVersion();
+             @endcode
+            
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.GetIntermediateResults">
+             <summary>
+             Returns intermediate results containing the original image, the colour clustered image, the binarized Image, contours, Lines, TextBlocks, etc.
+             </summary>
+             <returns>
+             Intermediate results.
+             </returns>
+             
+             @par Code Snippet:
+             @code
+                BarcodeReader reader = new BarcodeReader();
+                reader.ProductKeys = "t0260NwAAAHV***************";
+                PublicRuntimeSettings settings = new PublicRuntimeSettings();
+                settings = reader.GetRuntimeSettings();
+                settings.IntermediateResultTypes = (int)(EnumIntermediateResultType.IRT_ORIGINAL_IMAGE | EnumIntermediateResultType.IRT_COLOUR_CLUSTERED_IMAGE | EnumIntermediateResultType.IRT_COLOUR_CONVERTED_GRAYSCALE_IMAGE);
+                reader.UpdateRuntimeSettings(settings);
+                string fileName = @"C:\WorkingFolder\Zoro\DLL\AllSupportedBarcodeTypes.tif";
+                TextResult[] textResult = demo.DecodeFile(fileName, "");
+                IntermediateResult[] intermediateResults = reader.GetIntermediateResults();
+                reader.Dispose();
+             @endcode
+            
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.GetAllTextResults">
+            
+            @}
+            
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.InitLicenseFromLicenseContent(System.String,System.String)">
+            <summary>
+            Initializes barcode reader license and connects to the specified server for online verification.
+            </summary>
+            <param name="licenseKey">
+            The license key of Barcode Reader.
+            </param>
+            <param name="strLicenseContent">
+            An encrypted string representing the license content (runtime number, expiry date, barcode type, etc.) obtained from the method OutputLicenseToString().
+            </param>
+            <returns>
+            Returns error code. 
+            </returns>
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.InitLicenseFromServer(System.String,System.String)">
+            <summary>
+            Initializes barcode reader license and connects to the specified server for online verification.
+            </summary>
+            <param name="licenseServer">
+            The name/IP of the license server
+            </param>
+            <param name="licenseKey">
+            The license key of Barcode Reader.
+            </param>
+            <returns>
+            Returns error code. 
+            </returns>
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.OutputLicenseToString">
+            <summary>
+            Outputs the license content as an encrypted string from the license server to be used for offline license verification.
+            </summary>
+            <returns>
+            The output string which stores the contents of license.
+            </returns>
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReader.Dispose">
+            <summary>
+            Destroys an instance of Dynamsoft Barcode Reader.
+            </summary>
+            
+            @par Code Snippet:
+            @code
+                BarcodeReader reader = new BarcodeReader();
+                reader.ProductKeys = "t0260NwAAAHV***************";
+                reader.Dispose();
+            @endcode
+        </member>
+        <member name="P:Dynamsoft.Barcode.BarcodeReader.ProductKeys">
+            <summary>
+            Product keys used for Dynamsoft Barcode Reader.
+            </summary>
+            
+            @par Code Snippet:
+            @code
+               BarcodeReader reader = new BarcodeReader();
+               reader.ProductKeys = "t0260NwAAAHV***************";
+            @endcode
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumErrorCode">
+            <summary>
+            Describes error codes.
+            </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_GS1_COMPOSITE_LICENSE_INVALID">
+            <summary> The GS1 Composite code license is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_GS1_DATABAR_LICENSE_INVALID">
+            <summary> The GS1 Databar license is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_MAXICODE_LICENSE_INVALID">
+            <summary> The Maxicode license is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_IRT_LICENSE_INVALID">
+            <summary> The Intermediate Result Types license is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_GET_MODE_ARGUMENT_ERROR">
+            <summary> Failed to get mode's argument. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_LICENSE_DEVICE_RUNS_OUT">
+            <summary> The device number in the license key runs out. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_LICENSE_KEY_INVALID">
+            <summary> The license key is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_LICENSE_CONTENT_INVALID">
+            <summary> The license content is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_SET_MODE_ARGUMENT_ERROR">
+            <summary> Failed to set mode's argument. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_STOP_DECODING_THREAD_FAILED">
+            <summary> Failed to stop the frame decoding thread. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_FRAME_DECODING_THREAD_EXISTS">
+            <summary> The frame decoding thread is already existed. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_DPM_LICENSE_INVALID">
+            <summary> The DPM license is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_POSTALCODE_LICENSE_INVALID">
+            <summary> The Postal code license is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_PATCHCODE_LICENSE_INVALID">
+            <summary> The Patchcode license is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_LICENSE_INIT_FAILED">
+            <summary>  Failed to init the license.</summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_REQUESTED_FAILED">
+            <summary>  Failed to request the license file. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_LICENSEKEY_NOT_MATCHED">
+            <summary>  The license key is not match the license file. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_LICENSE_DLL_MISSING">
+            <summary>  The License DLL is missing. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_AZTEC_LICENSE_INVALID">
+            <summary>  The AZTEC license is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_RESERVEDINFO_NOT_MATCHED">
+            <summary>  The reserved info does not match the reserved info bound in the current product key. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_DOMAIN_NOT_MATCHED">
+            <summary>  The domain of your current site does not match the domain bound in the current product key. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_PARAMETER_VALUE_INVALID">
+            <summary> The parameter value is invalid or out of range. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_JSON_NAME_REFERENCE_INVALID">
+            <summary>  The name reference is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_TEMPLATE_NAME_INVALID">
+            <summary>  The template name is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_JSON_NAME_VALUE_DUPLICATED">
+            <summary>  The value of the key "Name" is duplicated. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_JSON_NAME_KEY_MISSING">
+            <summary>  The mandatory key "Name" is missing. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_JSON_VALUE_INVALID">
+            <summary>  The value is invalid or out of range. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_JSON_KEY_INVALID">
+            <summary>  The key is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_JSON_TYPE_INVALID">
+            <summary>  The value type is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_JSON_PARSE_FAILED">
+            <summary>  Failed to parse json string. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_RECOGNITION_TIMEOUT">
+            <summary>  Recognition timeout. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_CUSTOM_MODULESIZE_INVALID">
+            <summary>  The custom module size is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_CUSTOM_SIZE_INVALID">
+            <summary>  The custom size is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_PAGE_NUMBER_INVALID">
+            <summary>  The page number is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_PDF_DLL_MISSING">
+            <summary>  The PDF DLL is missing. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_PDF_READ_FAILED">
+            <summary>  Failed to read the PDF file. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_DATAMATRIX_LICENSE_INVALID">
+            <summary>  The DATAMATRIX license is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_PDF417_LICENSE_INVALID">
+            <summary>  The PDF417 license is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_DIB_BUFFER_INVALID">
+            <summary>  The DIB(Device-independent bitmaps) buffer is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_1D_LICENSE_INVALID">
+            <summary>  The 1D barcode license is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_QR_LICENSE_INVALID">
+            <summary>  The QR Code license is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_TIFF_READ_FAILED">
+            <summary>  Failed to read the TIFF image. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_IMAGE_READ_FAILED">
+            <summary>  Failed to read the image. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_MAX_BARCODE_NUMBER_INVALID">
+            <summary>  The maximum barcode number is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_CUSTOM_REGION_INVALID">
+            <summary>  The input region value parameter is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_BARCODE_FORMAT_INVALID">
+            <summary>  The barcode format is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_INDEX_INVALID">
+            <summary>  The index is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_BPP_NOT_SUPPORTED">
+            <summary>  The BPP(Bits per pixel) is not supported. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_FILETYPE_NOT_SUPPORTED">
+            <summary>  The file type is not supported. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_FILE_NOT_FOUND">
+            <summary>  The file is not found. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_LICENSE_EXPIRED">
+            <summary>  The license has expired. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_LICENSE_INVALID">
+            <summary>  The license is invalid. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_NULL_POINTER">
+            <summary>  Null pointer. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_NO_MEMORY">
+            <summary>  Not enough memory to perform the operation. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_UNKNOWN">
+            <summary>  Unknown error. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBR_SUCCESS">
+            <summary>  Successful. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBR_SYSTEM_EXCEPTION">
+            <summary>  System exception </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumErrorCode.DBRERR_LOAD_MODULE_DLL_FAILED">
+            <summary> Failed to load module dll . </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.BarcodeReaderException">
+            <summary> The exception class of Dynamsoft.BarcodeReader. </summary> 
+        </member>
+        <member name="M:Dynamsoft.Barcode.BarcodeReaderException.#ctor">
+            <summary>
+             Create an instance of BarcodeReaderException.
+            </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.BarcodeReaderException.Code">
+            <summary> Gets or sets the error code. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.BarcodeReaderException.Message">
+            <summary> Gets the message that describes the current exception. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.BarcodeReaderException.StackTrace">
+            <summary> Gets the string representation of the frames on the call stack at the time the current exception was thrown. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.CB_Error">
+            <summary>
+            Represents the method that will handle the error code returned by the SDK.
+            </summary>
+            <param name="frameId">The id of the frame.</param>
+            <param name="errorCode">Error Code generated when decoding the frame.</param>
+            <param name="pUser">Arguments pass to your function.</param>
+        </member>
+        <member name="T:Dynamsoft.Barcode.CB_TextResult">
+            <summary>
+            Represents the method that will handle the text result array returned by the SDK.
+            </summary>
+            <param name="frameId">The id of the frame.</param>
+            <param name="textResults">Recognized barcode results of the frame.</param>
+            <param name="pUser">Arguments pass to your function.</param>
+        </member>
+        <member name="T:Dynamsoft.Barcode.CB_IntermediateResult">
+            <summary>
+            Represents the method that will handle the intermediate result array returned by the SDK.
+            </summary>
+            <param name="frameId">The id of the frame.</param>
+            <param name="intermediateResults">The intermediate results of the frame.</param>
+            <param name="pUser">Arguments pass to your function.</param>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumBarcodeFormat">
+            
+             @addtogroup Enumerations Enumerations  
+             @{     
+            
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_ALL">
+            <summary> All supported formats in BarcodeFormat group 1 </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_ONED">
+            <summary> Combined value of BF_CODABAR, BF_CODE_128, BF_CODE_39, BF_CODE_39_Extended, BF_CODE_93, BF_EAN_13, BF_EAN_8, INDUSTRIAL_25, BF_ITF, BF_UPC_A, BF_UPC_E; </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_GS1_DATABAR">
+            <summary> Combined value of BF_GS1_DATABAR_OMNIDIRECTIONAL, BF_GS1_DATABAR_TRUNCATED, BF_GS1_DATABAR_STACKED, BF_GS1_DATABAR_STACKED_OMNIDIRECTIONAL, BF_GS1_DATABAR_EXPANDED, BF_GS1_DATABAR_EXPANDED_STACKED, BF_GS1_DATABAR_LIMITED; </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_CODE_39">
+            <summary> Code 39 </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_CODE_128">
+            <summary> Code 128 </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_CODE_93">
+            <summary> Code 93 </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_CODABAR">
+            <summary> Codabar </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_ITF">
+            <summary> ITF </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_EAN_13">
+            <summary> EAN-13 </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_EAN_8">
+            <summary> EAN-8 </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_UPC_A">
+            <summary> UPC-A </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_UPC_E">
+            <summary> UPC-E </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_INDUSTRIAL_25">
+            <summary> Industrial 2 of 5 </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_CODE_39_EXTENDED">
+            <summary> Code39 Extended </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_GS1_DATABAR_OMNIDIRECTIONAL">
+            <summary> Databar Omnidirectional </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_GS1_DATABAR_TRUNCATED">
+            <summary> Databar Truncated </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_GS1_DATABAR_STACKED">
+            <summary> Databar Stacked </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_GS1_DATABAR_STACKED_OMNIDIRECTIONAL">
+            <summary> Databar Stacked Omnidirectional </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_GS1_DATABAR_EXPANDED">
+            <summary> Databar Expanded </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_GS1_DATABAR_EXPANDED_STACKED">
+            <summary> Databar Expaned Stacked </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_GS1_DATABAR_LIMITED">
+            <summary> Databar Limited </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_PATCHCODE">
+            <summary> Patch code. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_PDF417">
+            <summary> PDF417 </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_QR_CODE">
+            <summary> QRCode </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_DATAMATRIX">
+            <summary> DataMatrix </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_AZTEC">
+            <summary> AZTEC </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_MAXICODE">
+            <summary> MAXICODE </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_MICRO_QR">
+            <summary> Micro QR Code </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_MICRO_PDF417">
+            <summary> Micro PDF417 </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_GS1_COMPOSITE">
+            <summary> GS1 Composite Code </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat.BF_NULL">
+            <summary> No barcode format in BarcodeFormat group 1 </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumBarcodeFormat_2">
+            <summary> Describes the barcode types in BarcodeFormat group 2.
+            Note: The barcode format our library will search for is composed of [BarcodeFormat group 1](@ref Dynamsoft.Barcode.EnumBarcodeFormat) and [BarcodeFormat group 2](@ref Dynamsoft.Barcode.EnumBarcodeFormat_2), so you need to specify the barcode format in group 1 and group 2 individually.
+            </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat_2.BF2_NULL">
+            <summary> No barcode format in BarcodeFormat group 2 </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat_2.BF2_POSTALCODE">
+            <summary> Combined value of BF2_USPSINTELLIGENTMAIL, BF2_POSTNET, BF2_PLANET, BF2_AUSTRALIANPOST, BF2_RM4SCC. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat_2.BF2_NONSTANDARD_BARCODE">
+            <summary> Nonstandard barcode </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat_2.BF2_USPSINTELLIGENTMAIL">
+            <summary> USPS Intelligent Mail. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat_2.BF2_POSTNET">
+            <summary> Postnet. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat_2.BF2_PLANET">
+            <summary> Planet. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat_2.BF2_AUSTRALIANPOST">
+            <summary> Australian Post. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeFormat_2.BF2_RM4SCC">
+            <summary> Royal Mail 4-State Customer Barcode. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumConflictMode">
+            <summary> Describes the conflict mode. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumConflictMode.CM_IGNORE">
+            <summary> Ignore new settings and inherit from previous settings. </summary> 
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumConflictMode.CM_OVERWRITE">
+            <summary> overwrite and replace by new settings. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumImagePixelFormat">
+            <summary> Describes the image pixel format. </summary> 
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumImagePixelFormat.IPF_BINARY">
+            <summary> 0:Black, 1:White </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumImagePixelFormat.IPF_BINARY_INVERTED">
+            <summary> 0:White, 1:Black </summary> 
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumImagePixelFormat.IPF_GRAYSCALED">
+            <summary> 8bit gray </summary> 
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumImagePixelFormat.IPF_NV21">
+            <summary> NV21 </summary> 
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumImagePixelFormat.IPF_RGB_565">
+            <summary> 16bit </summary> 
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumImagePixelFormat.IPF_RGB_555">
+            <summary> 16bit </summary> 
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumImagePixelFormat.IPF_RGB_888">
+            <summary> 24bit </summary> 
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumImagePixelFormat.IPF_ARGB_8888">
+            <summary> 32bit </summary> 
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumImagePixelFormat.IPF_RGB_161616">
+            <summary> 48bit </summary> 
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumImagePixelFormat.IPF_ARGB_16161616">
+            <summary> 64bit </summary> 
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumResultType">
+            <summary> Describes the extended result type. </summary> 
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumResultType.RT_STANDARD_TEXT">
+            <summary> Specifies the standard text. This means the barcode value. </summary> 
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumResultType.RT_RAW_TEXT">
+            <summary> Specifies the raw text. This means the text that includes start/stop characters, check digits, etc. </summary> 
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumResultType.RT_CANDIDATE_TEXT">
+            <summary> Specifies all the candidate text. This means all the standard text results decoded from the barcode. </summary> 
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumResultType.RT_PARTIAL_TEXT">
+            <summary> Specifies the partial Text. This means part of the text result decoded from the barcode. </summary> 
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumTerminatePhase">
+            <summary> Describes the terminate phase. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumTerminatePhase.TP_REGION_PREDETECTED">
+            <summary> Exits the barcode reading algorithm after the region predetection is done. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumTerminatePhase.TP_IMAGE_PREPROCESSED">
+            <summary> Exits the barcode reading algorithm after the region predetection and image pre-processing is done. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumTerminatePhase.TP_IMAGE_BINARIZED">
+            <summary> Exits the barcode reading algorithm after the region predetection, image pre-processing and image binarization are done. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumTerminatePhase.TP_BARCODE_LOCALIZED">
+            <summary> Exits the barcode reading algorithm after the region predetection, image pre-processing, image binarization and barcode localization are done. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumTerminatePhase.TP_BARCODE_TYPE_DETERMINED">
+            <summary> Exits the barcode reading algorithm after the region predetection, image pre-processing, image binarization, barcode localization and barcode type determining are done. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumTerminatePhase.TP_BARCODE_RECOGNIZED">
+            <summary> Exits the barcode reading algorithm after the region predetection, image pre-processing, image binarization, barcode localization, barcode type determining and barcode recognition are done. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumIMResultDataType">
+            <summary> Describes the intermediate result data type. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumIMResultDataType.IMRDT_IMAGE">
+            <summary> Specifies the ImageData. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumIMResultDataType.IMRDT_CONTOUR">
+            <summary> Specifies the Contour. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumIMResultDataType.IMRDT_LINESEGMENT">
+            <summary> Specifies the LineSegment. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumIMResultDataType.IMRDT_LOCALIZATIONRESULT">
+            <summary> Specifies the LocalizationResult. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumIMResultDataType.IMRDT_REGIONOFINTEREST">
+            <summary> Specifies the RegionOfInterest. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumQRCodeErrorCorrectionLevel">
+            <summary> Describes the QR Code error correction level. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumQRCodeErrorCorrectionLevel.QRECL_ERROR_CORRECTION_H">
+            <summary> Error Correction Level H (high) </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumQRCodeErrorCorrectionLevel.QRECL_ERROR_CORRECTION_L">
+            <summary> Error Correction Level L (low) </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumQRCodeErrorCorrectionLevel.QRECL_ERROR_CORRECTION_M">
+            <summary> Error Correction Level M (medium-low) </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumQRCodeErrorCorrectionLevel.QRECL_ERROR_CORRECTION_Q">
+            <summary> Error Correction Level  Q (medium-high) </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumBarcodeComplementMode">
+            <summary> Describes the barcode complement mode. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeComplementMode.BCM_AUTO">
+            <summary> Not supported yet. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeComplementMode.BCM_GENERAL">
+            <summary> Complements the barcode using the general algorithm. Check @ref BCM for available argument settings. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeComplementMode.BCM_SKIP">
+            <summary> Skip the barcode complement. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumBarcodeColourMode">
+            <summary> Describes the barcode colour mode. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeColourMode.BICM_DARK_ON_LIGHT">
+            <summary> Dark items on the light background. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeColourMode.BICM_LIGHT_ON_DARK">
+            <summary> Light items on the dark background. Not supported yet. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeColourMode.BICM_DARK_ON_DARK">
+            <summary> Dark items on the dark background. Not supported yet. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeColourMode.BICM_LIGHT_ON_LIGHT">
+            <summary> Light items on the light background. Not supported yet. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeColourMode.BICM_DARK_LIGHT_MIXED">
+            <summary> The background is mixed by dark and light. Not supported yet. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeColourMode.BICM_DARK_ON_LIGHT_DARK_SURROUNDING">
+            <summary> Dark on light items on the dark background. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBarcodeColourMode.BICM_SKIP">
+            <summary> Skip the barcode colour operation. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumBinarizationMode">
+            <summary> Describes the binarization mode. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBinarizationMode.BM_AUTO">
+            <summary> Not supported yet. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBinarizationMode.BM_LOCAL_BLOCK">
+            <summary> Binarizes the image based on the local block. Check @ref BM for available argument settings. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumBinarizationMode.BM_SKIP">
+            <summary> Skip the binarization. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumColourClusteringMode">
+            <summary> Describes the colour clustering mode. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumColourClusteringMode.CCM_AUTO">
+            <summary> Not supported yet. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumColourClusteringMode.CCM_GENERAL_HSV">
+            <summary> Clusters colours using the general algorithm based on HSV. Check @ref CCM for available argument settings. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumColourClusteringMode.CCM_SKIP">
+            <summary> Skip the colour clustering. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumColourConversionMode">
+            <summary> Describes the colour conversion mode. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumColourConversionMode.CICM_GENERAL">
+            <summary> Converts a colour image to a grayscale image using the general algorithm. Check @ref CICM for available argument settings. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumColourConversionMode.CICM_SKIP">
+            <summary> Skip the colour conversion. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumDPMCodeReadingMode">
+            <summary> Describes the DPM code reading mode. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumDPMCodeReadingMode.DPMCRM_AUTO">
+            <summary> Not supported yet. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumDPMCodeReadingMode.DPMCRM_GENERAL">
+            <summary> Reads DPM code using the general algorithm. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumDPMCodeReadingMode.DPMCRM_SKIP">
+            <summary> Skip the DPM code reading. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumImagePreprocessingMode">
+            <summary> Describes the image preprocessing mode. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumImagePreprocessingMode.IPM_AUTO">
+            <summary> Not supported yet. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumImagePreprocessingMode.IPM_GENERAL">
+            <summary> Take the unpreprocessed image as the preprocessed result for further reference. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumImagePreprocessingMode.IPM_GRAY_EQUALIZE">
+            <summary> Preprocesses the image using the gray equalization algorithm. Check @ref IPM for available argument settings. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumImagePreprocessingMode.IPM_GRAY_SMOOTH">
+            <summary> Preprocesses the image using the gray smoothing algorithm. Check @ref IPM for available argument settings. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumImagePreprocessingMode.IPM_SHARPEN_SMOOTH">
+            <summary> Preprocesses the image using the sharpening and smoothing algorithm. Check @ref IPM for available argument settings. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumImagePreprocessingMode.IPM_SKIP">
+            <summary> Skip the image preprocessing. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumIntermediateResultType">
+            <summary> Describes the intermediate result type. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumIntermediateResultType.IRT_NO_RESULT">
+            <summary> No intermediate result. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumIntermediateResultType.IRT_ORIGINAL_IMAGE">
+            <summary> Original image. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumIntermediateResultType.IRT_COLOUR_CLUSTERED_IMAGE">
+            <summary> Colour clustered image. Not supported yet. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumIntermediateResultType.IRT_COLOUR_CONVERTED_GRAYSCALE_IMAGE">
+            <summary> Colour converted grayscale image. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumIntermediateResultType.IRT_TRANSFORMED_GRAYSCALE_IMAGE">
+            <summary> Transformed grayscale image. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumIntermediateResultType.IRT_PREDETECTED_REGION">
+            <summary> Predetected region. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumIntermediateResultType.IRT_PREPROCESSED_IMAGE">
+            <summary> Preprocessed image. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumIntermediateResultType.IRT_BINARIZED_IMAGE">
+            <summary> Binarized image. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumIntermediateResultType.IRT_TEXT_ZONE">
+            <summary> Text zone. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumIntermediateResultType.IRT_CONTOUR">
+            <summary> Contour. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumIntermediateResultType.IRT_LINE_SEGMENT">
+            <summary> Line segment </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumIntermediateResultType.IRT_FORM">
+            <summary> Form. Not supported yet. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumIntermediateResultType.IRT_SEGMENTATION_BLOCK">
+            <summary> Segmentation block. Not supported yet. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumIntermediateResultType.IRT_TYPED_BARCODE_ZONE">
+            <summary> Typed barcode zone. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumLocalizationMode">
+            <summary> Describes the localization mode. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumLocalizationMode.LM_AUTO">
+            <summary> Not supported yet. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumLocalizationMode.LM_CONNECTED_BLOCKS">
+            <summary> Localizes barcodes by searching connected blocks. This algorithm usually gives best result and it is recommended to set ConnectedBlocks to the highest priority. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumLocalizationMode.LM_STATISTICS">
+            <summary> Localizes barcodes by groups of contiguous black-white regions. This is optimized for QRCode and DataMatrix. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumLocalizationMode.LM_LINES">
+            <summary> Localizes barcodes by searching for groups of lines. This is optimized for 1D and PDF417 barcodes. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumLocalizationMode.LM_SCAN_DIRECTLY">
+            <summary> Localizes barcodes quickly. This mode is recommended in interactive scenario. Check @ref LM for available argument settings. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumLocalizationMode.LM_STATISTICS_MARKS">
+            <summary> Localizes barcodes by groups of marks.This is optimized for DPM codes. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumLocalizationMode.LM_STATISTICS_POSTAL_CODE">
+            <summary> Localizes barcodes by groups of connected blocks and lines.This is optimized for postal codes. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumLocalizationMode.LM_SKIP">
+            <summary> Skip the localization. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumRegionPredetectionMode">
+            <summary> Describes the region predetection mode. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumRegionPredetectionMode.RPM_AUTO">
+            <summary> The library will automatically choose the algorithm to detect region. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumRegionPredetectionMode.RPM_GENERAL">
+            <summary> Take the whole image as a region. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumRegionPredetectionMode.RPM_GENERAL_RGB_CONTRAST">
+            <summary> Detects region using the general algorithm based on RGB colour contrast. Check @ref RPM for available argument settings. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumRegionPredetectionMode.RPM_GENERAL_GRAY_CONTRAST">
+            <summary> Detects region using the general algorithm based on gray contrast. Check @ref RPM for available argument settings. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumRegionPredetectionMode.RPM_GENERAL_HSV_CONTRAST">
+            <summary> Detects region using the general algorithm based on HSV colour contrast. Check @ref RPM for available argument settings. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumRegionPredetectionMode.RPM_SKIP">
+            <summary> Skip the region detection. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumDeformationResistingMode">
+            <summary> Describes the deformation resisting mode. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumDeformationResistingMode.DRM_AUTO">
+            <summary> Not supported yet. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumDeformationResistingMode.DRM_GENERAL">
+            <summary> Resists deformation using the general algorithm. Check @ref DRM for available argument settings. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumDeformationResistingMode.DRM_SKIP">
+            <summary> Skip the deformation resisting. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumTextAssistedCorrectionMode">
+            <summary> Describes the text assisted correction mode. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumTextAssistedCorrectionMode.TACM_AUTO">
+            <summary> Not supported yet. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumTextAssistedCorrectionMode.TACM_VERIFYING">
+            <summary> The accompanying text will be used to verify the decoded barcode result. Check @ref TACM for available argument settings. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumTextAssistedCorrectionMode.TACM_VERIFYING_PATCHING">
+            <summary> The accompanying text will be used to verify and patch the decoded barcode result. Check @ref TACM for available argument settings. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumTextAssistedCorrectionMode.TACM_SKIP">
+            <summary> Skip the text assisted correction. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumIntermediateResultSavingMode">
+            <summary> Describes the intermediate result saving mode. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumIntermediateResultSavingMode.IRSM_MEMORY">
+            <summary> Save intermediate results in memory. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumIntermediateResultSavingMode.IRSM_FILESYSTEM">
+            <summary> Save intermediate results in file system. Check @ref IRSM for available argument settings. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumIntermediateResultSavingMode.IRSM_BOTH">
+            <summary> Save intermediate results both in memory and file system. Check @ref IRSM for available argument settings. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumTextFilterMode">
+            <summary> Describes the text filter mode.  </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumTextFilterMode.TFM_AUTO">
+            <summary> Not supported yet. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumTextFilterMode.TFM_GENERAL_CONTOUR">
+            <summary> Filters text using the general algorithm based on contour. Check @ref TFM for available argument settings. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumTextFilterMode.TFM_SKIP">
+            <summary> Skip the text filtering. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumTextResultOrderMode">
+            <summary> Describes the text result order mode. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumTextResultOrderMode.TROM_CONFIDENCE">
+            <summary> Returns the text results in descending order by confidence. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumTextResultOrderMode.TROM_POSITION">
+            <summary> Returns the text results in position order, from top to bottom, then left to right. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumTextResultOrderMode.TROM_FORMAT">
+            <summary> Returns the text results in alphabetical and numercial order by barcode format string. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumTextResultOrderMode.TROM_SKIP">
+            <summary> Skip the ordering operation. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumTextureDetectionMode">
+            <summary> Describes the texture detection mode. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumTextureDetectionMode.TDM_AUTO">
+            <summary> Not supported yet. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumTextureDetectionMode.TDM_GENERAL_WIDTH_CONCENTRATION">
+            <summary> Detects texture using the general algorithm. Check @ref TDM for available argument settings. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumTextureDetectionMode.TDM_SKIP">
+            <summary> Skip the texture detection. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumGrayscaleTransformationMode">
+            <summary> Describes the grayscale transformation mode. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumGrayscaleTransformationMode.GTM_INVERTED">
+            <summary> Transforms to the inverted grayscale for further reference. This value is recommand for light on dark images. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumGrayscaleTransformationMode.GTM_ORIGINAL">
+            <summary> Keeps the original grayscale for further reference. This value is recommand for dark on light images. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumGrayscaleTransformationMode.GTM_SKIP">
+            <summary> Skip the grayscale transformation. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumResultCoordinateType">
+            <summary> Describes the result coordinate type. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumResultCoordinateType.RCT_PIXEL">
+            <summary> Returns the coordinate in pixel value. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumResultCoordinateType.RCT_PERCENTAGE">
+            <summary> Returns the coordinate as a percentage. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumScaleUpMode">
+            <summary> Describes the scale up mode </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumScaleUpMode.SUM_AUTO">
+            <summary> The library chooses an interpolation method automatically to scale up. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumScaleUpMode.SUM_LINEAR_INTERPOLATION">
+            <summary> Scales up using the linear interpolation method. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumScaleUpMode.SUM_NEAREST_NEIGHBOUR_INTERPOLATION">
+            <summary> Scales up using the nearest-neighbour interpolation method. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumScaleUpMode.SUM_SKIP">
+            <summary> Skip the scale-up process. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.EnumAccompanyingTextRecognitionMode">
+            <summary> Describes the accompanying text recognition mode. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumAccompanyingTextRecognitionMode.ATRM_GENERAL">
+            <summary> Recognizes accompanying texts using the general algorithm. </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.EnumAccompanyingTextRecognitionMode.ATRM_SKIP">
+            <summary> Skips the accompanying text recognition. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.FrameDecodingParameters">
+            
+             @class FrameDecodingParameters   
+             
+             <summary> Configures the frame decoding Parameters. </summary>
+             
+        </member>
+        <!-- Badly formed XML comment ignored for member "F:Dynamsoft.Barcode.FrameDecodingParameters.MaxQueueLength" -->
+        <!-- Badly formed XML comment ignored for member "F:Dynamsoft.Barcode.FrameDecodingParameters.MaxResultQueueLength" -->
+        <!-- Badly formed XML comment ignored for member "F:Dynamsoft.Barcode.FrameDecodingParameters.Width" -->
+        <!-- Badly formed XML comment ignored for member "F:Dynamsoft.Barcode.FrameDecodingParameters.Height" -->
+        <!-- Badly formed XML comment ignored for member "F:Dynamsoft.Barcode.FrameDecodingParameters.Stride" -->
+        <!-- Badly formed XML comment ignored for member "F:Dynamsoft.Barcode.FrameDecodingParameters.ImagePixelFormat" -->
+        <!-- Badly formed XML comment ignored for member "F:Dynamsoft.Barcode.FrameDecodingParameters.Region" -->
+        <!-- Badly formed XML comment ignored for member "F:Dynamsoft.Barcode.FrameDecodingParameters.Threshold" -->
+        <!-- Badly formed XML comment ignored for member "F:Dynamsoft.Barcode.FrameDecodingParameters.FPS" -->
+        <!-- Badly formed XML comment ignored for member "F:Dynamsoft.Barcode.FrameDecodingParameters.AutoFilter" -->
+        <member name="T:Dynamsoft.Barcode.TextResult">
+            
+             @class TextResult   
+             
+             <summary> Stores the text results including the barcode type, barcode text, bytes and localization result. </summary>
+             
+        </member>
+        <member name="P:Dynamsoft.Barcode.TextResult.BarcodeFormat">
+            <summary> Barcode type in BarcodeFormat group 1 </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.TextResult.BarcodeFormatString">
+            <summary> Barcode type in BarcodeFormat group 1 as string </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.TextResult.BarcodeFormat_2">
+            <summary> Barcode type in BarcodeFormat group 2 </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.TextResult.BarcodeFormatString_2">
+            <summary> Barcode type in BarcodeFormat group 2 as string </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.TextResult.BarcodeText">
+            <summary> The barcode text </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.TextResult.BarcodeBytes">
+            <summary> The barcode content in a byte array </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.TextResult.LocalizationResult">
+            <summary> The corresponding localization result </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.TextResult.Results">
+            <summary> The extended result array </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.TextResult.DetailedResult">
+            <summary> One of the following: QRCodeDetails, PDF417Details, DataMatrixDetails, AztecDetails, OneDCodeDetails. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.ExtendedResult">
+            
+             @class ExtendedResult
+                    
+             <summary> Stores the extended result. </summary>
+            
+        </member>
+        <member name="P:Dynamsoft.Barcode.ExtendedResult.ResultType">
+            <summary> Extended result type </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.ExtendedResult.BarcodeFormat">
+            <summary> Barcode type in BarcodeFormat group 1 </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.ExtendedResult.BarcodeFormatString">
+            <summary> Barcode type in BarcodeFormat group 1 as string </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.ExtendedResult.BarcodeFormat_2">
+            <summary> Barcode type in BarcodeFormat group 2 </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.ExtendedResult.BarcodeFormatString_2">
+            <summary> Barcode type in BarcodeFormat group 2 as string </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.ExtendedResult.Confidence">
+            <summary> The confidence of the result </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.ExtendedResult.Deformation">
+            <summary> The deformation value </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.ExtendedResult.Bytes">
+            <summary> The content in a byte array </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.ExtendedResult.AccompanyingTextBytes">
+            <summary> The accompanying text content in a byte array  </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.ExtendedResult.DetailedResult">
+            <summary> One of the following: QRCodeDetails, PDF417Details, DataMatrixDetails, AztecDetails, OneDCodeDetails.  </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.ExtendedResult.SamplingImage">
+            <summary> The sampling image info. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.ExtendedResult.Clarity">
+            <summary> The clarity of the barcode zone in percentage. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.LocalizationResult">
+             
+            @class LocalizationResult
+                    
+            <summary> Stores the localization results </summary>
+             
+        </member>
+        <member name="P:Dynamsoft.Barcode.LocalizationResult.TerminatePhase">
+            <summary> The terminate phase of localization result. </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.LocalizationResult.BarcodeFormat">
+            <summary> Barcode type in BarcodeFormat group 1 </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.LocalizationResult.BarcodeFormatString">
+            <summary> Barcode type in BarcodeFormat group 1 as string </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.LocalizationResult.BarcodeFormat_2">
+            <summary> Barcode type in BarcodeFormat group 2 </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.LocalizationResult.BarcodeFormatString_2">
+            <summary> Barcode type in BarcodeFormat group 2 as string </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.LocalizationResult.Angle">
+            <summary> The angle of a barcode. Values range from 0 to 360. </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.LocalizationResult.ResultPoints">
+            <summary> The array which stores the coordinates of four result points. </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.LocalizationResult.ModuleSize">
+            <summary> The barcode module size (the minimum bar width in pixel). </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.LocalizationResult.PageNumber">
+            <summary> The page number the barcode located in. The index is 0-based. </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.LocalizationResult.RegionName">
+            <summary> The region name the barcode located in. </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.LocalizationResult.DocumentName">
+            <summary> The document name. </summary> 
+        </member>
+        <member name="P:Dynamsoft.Barcode.LocalizationResult.AccompanyingTextBytes">
+            <summary> The accompanying text content in a byte array. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.LocalizationResult.Confidence">
+            <summary> The confidence of the localization result. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.IntermediateResult">
+             
+            @class IntermediateResult
+                    
+            <summary> Stores the Intermediate Result </summary>
+            
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.Results">
+            <summary> One of the following types:Array of Contour,Array of ImageData,Array of LineSegment, Array of LocalizationResult, Array of RegionOfInterest. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.DataType">
+            <summary> The data type of the intermediate result. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.ResultType">
+            <summary> Intermediate result type. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.BarcodeComplementMode">
+            <summary> The BarcodeComplementMode used when generating the current intermediate result. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.BCMIndex">
+            <summary> The array index of current used ColourClusteringMode in ColourClusteringModes setting. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.DeformationResistingMode">
+            <summary> The DeformationResistingMode used when generating the current intermediate result. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.DRMIndex">
+            <summary> The array index of current used DeformationResistingMode in DeformationResistingModes setting. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.DPMCodeReadingMode">
+            <summary> The DPMCodeReadingMode used when generating the current intermediate result. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.DPMCRMIndex">
+            <summary> The array index of current used DPMCodeReadingMode in DPMCodeReadingModes setting. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.RotationMatrix">
+            <summary> The rotation matrix. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.TextFilterMode">
+            <summary> The TextFilterMode used when generating the current intermediate result. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.TFMIndex">
+            <summary> The array index of current used TextFilterMode in TextFilterModes setting. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.LocalizationMode">
+            <summary> The LocalizationMode used when generating the current intermediate result. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.LMIndex">
+            <summary> The array index of current used LocalizationMode in LocalizationModes setting. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.BinarizationMode">
+            <summary> The BinarizationMode used when generating the current intermediate result. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.BMIndex">
+            <summary> The array index of current used BinarizationMode in BinarizationModes setting. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.ImagePreprocessingMode">
+            <summary> The ImagePreprocessingMode used when generating the current intermediate result. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.IPMIndex">
+            <summary> The array index of current used ImagePreprocessingMode in ImagePreprocessingModes setting. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.RegionPredetectionMode">
+            <summary> The RegionPredetectionMode used when generating the current intermediate result. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.RPMIndex">
+            <summary> The array index of current used RegionPredetectionMode in RegionPredetectionModes setting. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.GrayscaleTransformationMode">
+            <summary> The GrayscaleTransformationMode used when generating the current intermediate result. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.GTMIndex">
+            <summary> The array index of current used GrayscaleTransformationMode in GrayscaleTransformationModes setting. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.ColourConversionMode">
+            <summary> The ColourConversionMode used when generating the current intermediate result. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.CICMIndex">
+            <summary> The array index of current used ColourConversionMode in ColourConversionModes setting. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.ColourClusteringMode">
+            <summary> The ColourClusteringMode used when generating the current intermediate result. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.CCMIndex">
+            <summary> The array index of current used ColourClusteringMode in ColourClusteringModes setting. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.ROIId">
+            <summary> The id of the ROI(Region Of Interest) generated by the SDK. -1 means the original image. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.ScaleDownRatio">
+            <summary> The scal down ratio. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.IntermediateResult.FrameId">
+            <summary> The id of the operated frame. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.OneDCodeDetails">
+             
+            @class OneDCodeDetails
+                    
+            <summary> Stores the OneD code details</summary>
+            
+        </member>
+        <member name="P:Dynamsoft.Barcode.OneDCodeDetails.ModuleSize">
+            <summary> The barcode module size (the minimum bar width in pixel). </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.OneDCodeDetails.StartCharsBytes">
+            <summary> The start chars in a byte array. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.OneDCodeDetails.StopCharsBytes">
+            <summary> The stop chars in a byte array. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.OneDCodeDetails.CheckDigitBytes">
+            <summary> The check digit chars in a byte array. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.QRCodeDetails">
+             
+            @class QRCodeDetails
+                    
+            <summary> Stores the QRCode details </summary>
+            
+        </member>
+        <member name="P:Dynamsoft.Barcode.QRCodeDetails.ModuleSize">
+            <summary> The barcode module size (the minimum bar width in pixel). </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.QRCodeDetails.Rows">
+            <summary> The row count of the barcode. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.QRCodeDetails.ErrorCorrectionLevel">
+            <summary> The column count of the barcode. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.QRCodeDetails.Version">
+            <summary> The version of the QR Code. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.QRCodeDetails.Model">
+            <summary> Number of the models. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.PDF417Details">
+             
+            @class PDF417Details
+                    
+            <summary> Stores the PDF417 details </summary>
+            
+        </member>
+        <member name="P:Dynamsoft.Barcode.PDF417Details.ModuleSize">
+            <summary> The barcode module size (the minimum bar width in pixel). </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.PDF417Details.Rows">
+            <summary> The row count of the barcode. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.PDF417Details.Columns">
+            <summary> The column count of the barcode. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.PDF417Details.ErrorCorrectionLevel">
+            <summary> The error correction level of the barcode. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.DataMatrixDetails">
+             
+            @class DataMatrixDetails
+                    
+            <summary> Stores the DataMatrix details </summary>
+            
+        </member>
+        <member name="P:Dynamsoft.Barcode.DataMatrixDetails.ModuleSize">
+            <summary> The barcode module size (the minimum bar width in pixel). </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.DataMatrixDetails.Rows">
+            <summary> The row count of the barcode. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.DataMatrixDetails.Columns">
+            <summary> The column count of the barcode. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.DataMatrixDetails.DataRegionRows">
+            <summary> The data region row count of the barcode. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.DataMatrixDetails.DataRegionColumns">
+            <summary> The data region column count of the barcode. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.DataMatrixDetails.DataRegionNumber">
+            <summary> The data region count </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.AztecDetails">
+             
+            @class AztecDetails
+                    
+            <summary> Stores the Aztec details </summary>
+            
+        </member>
+        <member name="P:Dynamsoft.Barcode.AztecDetails.ModuleSize">
+            <summary> The barcode module size (the minimum bar width in pixel). </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.AztecDetails.Rows">
+            <summary> The row count of the barcode. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.AztecDetails.Columns">
+            <summary> The column count of the barcode. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.AztecDetails.LayerNumber">
+            <summary> A negative number (-1, -2, -3, -4) specifies a compact Aztec code. </summary>
+            <summary> A positive number (1, 2, .. 32) specifies a normal (full-rang) Aztec code. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.Contour">
+             
+            @class Contour
+                    
+            <summary> Stores the contour </summary>
+            
+        </member>
+        <member name="P:Dynamsoft.Barcode.Contour.Points">
+            <summary> The points array </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.ImageData">
+             
+            @class ImageData
+                    
+            <summary> Stores the image data </summary>
+            
+        </member>
+        <member name="P:Dynamsoft.Barcode.ImageData.Bytes">
+            <summary> The image data content in a byte array. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.ImageData.Width">
+            <summary> The width of the image in pixels. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.ImageData.Height">
+            <summary> The height of the image in pixels. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.ImageData.Stride">
+            <summary> The stride of the image (also called scan width). </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.ImageData.Format">
+            <summary> The image pixel format used in the image byte array. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.SamplingImageData">
+             
+            @class SamplingImageData
+                    
+            <summary> Stores the sampling image data </summary>
+            
+        </member>
+        <member name="P:Dynamsoft.Barcode.SamplingImageData.Bytes">
+            <summary> The sampling image data in a byte array. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.SamplingImageData.Width">
+            <summary> The width of the sampling image. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.SamplingImageData.Height">
+            <summary> The height of the sampling image. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.LineSegment">
+             
+            @class LineSegment
+                    
+            <summary> Stores the line segment </summary>
+            
+        </member>
+        <member name="P:Dynamsoft.Barcode.LineSegment.StartPoint">
+            <summary> The start point of the line segment. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.LineSegment.EndPoint">
+            <summary> The end point of the line segment. </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.LineSegment.LinesConfidenceCoefficients">
+            <summary> The confidence coefficients for lines.
+            There are 4 coefficients in this set:  
+            LinesConfidenceCoefficients[0] is average positive amplitude;  
+            LinesConfidenceCoefficients[1] is max positive amplitude;  
+            LinesConfidenceCoefficients[2] is average negative amplitude;  
+            LinesConfidenceCoefficients[3] is max negative amplitude.
+            </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.PublicRuntimeSettings">
+            
+             <summary>
+             Defines a struct to configure the barcode reading runtime settings.  
+             These settings are used to control the barcode recognition process such as which barcode types are to be decoded. 
+             </summary>
+            
+        </member>
+        <member name="F:Dynamsoft.Barcode.PublicRuntimeSettings.TerminatePhase">
+            <summary> Sets the phase where the algorithm stops.
+            
+            @par Value range:
+                    Any one of the TerminatePhase Enumeration items
+            @par Default value:
+                    TP_BARCODE_RECOGNIZED
+            @par Remarks:
+                    When the recognition result is not desired, this parameter can be set to skip certain processing stages.
+            @sa Dynamsoft.Barcode.EnumTerminatePhase       
+            </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.PublicRuntimeSettings.Timeout">
+             <summary> Sets the maximum amount of time (in milliseconds) that should be spent searching for a barcode per page. It does not include the time taken to load/decode an image (Tiff, PNG, etc) from disk into memory.
+            
+             @par Value range:
+             	    [0, 0x7fffffff]
+             @par Default value:
+             	    10000
+             @par Remarks:
+            	    If you want to stop reading barcodes after a specified amount of time, you can use this parameter to set a timeout.
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.PublicRuntimeSettings.MaxAlgorithmThreadCount">
+             <summary> Sets the number of threads the image processing algorithm will use to decode barcodes.
+            
+             @par Value range:
+             	    [1, 4]
+             @par Default value:
+             	    4
+             @par Remarks:
+            	    By default, the library concurrently runs four different threads for decoding barcodes in order to keep a balance between speed and quality. For some devices (e.g. Raspberry Pi) that only use one core, you can set it to 1 for best speed. If you create BarcodeReader.
+             </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "F:Dynamsoft.Barcode.PublicRuntimeSettings.ExpectedBarcodesCount" -->
+        <member name="F:Dynamsoft.Barcode.PublicRuntimeSettings.BarcodeFormatIds">
+             <summary> Sets the formats of the barcode in BarcodeFormat group 1 to be read. Barcode formats in BarcodeFormat group 1 can be combined.
+            
+             @par Value range:
+             	    A combined value of EnumBarcodeFormat Enumeration items
+             @par Default value:
+             	    BF_ALL
+             @par Remarks:
+            	     If you already know the barcode type(s) before performing barcode reading, specifying the barcode type(s) to be read will speed up the recognition process.
+            	     The barcode format our library will search for is composed of [BarcodeFormat group 1](@ref Dynamsoft.Barcode.EnumBarcodeFormat) and [BarcodeFormat group 2](@ref Dynamsoft.Barcode.EnumBarcodeFormat_2), so you need to specify the barcode format in group 1 and group 2 individually.
+             @sa Dynamsoft.Barcode.EnumBarcodeFormat, Dynamsoft.Barcode.EnumBarcodeFormat_2
+             </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "F:Dynamsoft.Barcode.PublicRuntimeSettings.BarcodeFormatIds_2" -->
+        <member name="F:Dynamsoft.Barcode.PublicRuntimeSettings.PDFRasterDPI">
+             <summary> Sets the output image resolution.
+            
+             @par Value range:
+             	    [100, 600]
+             @par Default value:
+             	    300
+             @par Remarks:
+            	     When you are trying to decode a PDF file using DecodeFile method, the library will convert the pdf file to image(s) first, then perform barcode recognition.
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.PublicRuntimeSettings.ScaleDownThreshold">
+             <summary> Sets the threshold for the image shrinking.
+            
+             @par Value range:
+             	    [512, 0x7fffffff]
+             @par Default value:
+             	    2300
+             @par Remarks:
+            	     If the shorter edge size is larger than the given value, the library will calculate the required height and width of the barcode image and shrink the image to that size before localization. Otherwise, it will perform barcode localization on the original image.
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.PublicRuntimeSettings.BinarizationModes">
+             <summary> Sets the mode and priority for binarization.
+            
+             @par Value range:
+             	    Each array item can be any one of the BinarizationMode Enumeration items.
+             @par Default value:
+             	    [BM_LOCAL_BLOCK,BM_SKIP,BM_SKIP,BM_SKIP,BM_SKIP,BM_SKIP,BM_SKIP,BM_SKIP]
+             @par Remarks:
+            	     The array index represents the priority of the item. The smaller index is, the higher priority is.
+            	@sa  Dynamsoft.Barcode.EnumBinarizationMode
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.PublicRuntimeSettings.LocalizationModes">
+             <summary> Sets the mode and priority for localization algorithms.
+            
+             @par Value range:
+             	    Each array item can be any one of the LocalizationMode Enumeration items.
+             @par Default value:
+             	    [LM_CONNECTED_BLOCKS,LM_SCAN_DIRECTLY,LM_STATISTICS,LM_LINES,LM_SKIP,LM_SKIP,LM_SKIP,LM_SKIP]
+             @par Remarks:
+            	     The array index represents the priority of the item. The smaller index is, the higher priority is.
+             @sa  Dynamsoft.Barcode.EnumLocalizationMode
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.PublicRuntimeSettings.FurtherModes">
+            <summary> 
+            Sets the further modes.
+            </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.PublicRuntimeSettings.DeblurLevel">
+             <summary> Sets the degree of blurriness of the barcode.
+            
+             @par Value range:
+             	    [0, 9]
+             @par Default value:
+             	    9
+             @par Remarks:
+            	     If you have a blurry image, you can set this property to a larger value. The higher value set, the more effort the library will spend to decode images, but it may also slow down the recognition process.
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.PublicRuntimeSettings.IntermediateResultTypes">
+             <summary> Sets which types of intermediate result to be kept for further reference. Intermediate result types can be combined.
+            
+             @par Value range:
+             	     A combined value of IntermediateResultType Enumeration items
+             @par Default value:
+             	    0
+             @par Remarks:
+            	     If you have a blurry image, you can set this property to a larger value. The higher value set, the more effort the library will spend to decode images, but it may also slow down the recognition process.
+             @sa Dynamsoft.Barcode.EnumIntermediateResultType
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.PublicRuntimeSettings.IntermediateResultSavingMode">
+            <summary> Sets the intermediate result saving mode.
+            
+            @par Value range:
+                    A value of IntermediateResultSavingMode Enumeration items
+            @par Default value:
+                    IRSM_MEMORY
+            @sa Dynamsoft.Barcode.EnumIntermediateResultSavingMode
+            </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.PublicRuntimeSettings.ResultCoordinateType">
+             <summary> Specifies the format for the coordinates returned.
+            
+             @par Value range:
+             	     Any one of the ResultCoordinateType Enumeration items
+             @par Default value:
+             	    RCT_PIXEL
+             @sa Dynamsoft.Barcode.EnumResultCoordinateType
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.PublicRuntimeSettings.TextResultOrderModes">
+             <summary> Sets the mode and priority for the order of the text results returned.
+            
+             @par Value range:
+             	     Each array item can be any one of the TextResultOrderMode Enumeration items
+             @par Default value:
+             	    [TROM_CONFIDENCE,TROM_POSITION,TROM_FORMAT,TROM_SKIP,TROM_SKIP,TROM_SKIP,TROM_SKIP,TROM_SKIP]
+             @sa Dynamsoft.Barcode.EnumTextResultOrderMode
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.PublicRuntimeSettings.ReturnBarcodeZoneClarity">
+             <summary> Sets whether or not to return the clarity of the barcode zone.
+            
+             @par Value range:
+             	     [0, 1]
+             @par Default value:
+             	    0
+             @par Remarks:
+                 0 : Do not return the clarity of the barcode zone;
+                 1 : Return the clarity of the batcode zone.
+             </summary>    
+        </member>
+        <member name="F:Dynamsoft.Barcode.PublicRuntimeSettings.Region">
+            <summary>
+            Sets the region definition including the regionTop, regionLeft, regionRight, regionBottom and regionMeasuredByPercentage.
+            </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.PublicRuntimeSettings.MinBarcodeTextLength">
+             <summary> Sets the range of barcode text length for barcodes search.
+            
+             @par Value range:
+             	     [0, 0x7fffffff]
+             @par Default value:
+             	    0
+             @par Remarks:
+                     0: means no limitation on the barcode text length.
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.PublicRuntimeSettings.MinResultConfidence">
+             <summary> The minimum confidence of the result.
+            
+             @par Value range:
+             	     [0, 100]
+             @par Default value:
+             	    0
+             @par Remarks:
+                     0: means no limitation on the barcode text length.
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.PublicRuntimeSettings.ScaleUpModes">
+             <summary> Sets the mode and priority to control the sampling methods of scale-up for linear barcode with small module sizes .
+            
+             @par Value range:
+             	    Each array item can be any one of the ScaleUpMode Enumeration items.
+             @par Default value:
+             	    [SUM_AUTO,SUM_SKIP,SUM_SKIP,SUM_SKIP,SUM_SKIP,SUM_SKIP,SUM_SKIP,SUM_SKIP]
+             @par Remarks:
+            	     The array index represents the priority of the item. The smaller index is, the higher priority is.
+             @sa  Dynamsoft.Barcode.EnumScaleUpMode
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.PublicRuntimeSettings.Reserved">
+            <summary> Reserved memory for struct. The length of this array indicates the size of the memory reserved for this struct. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.RegionDefinition">
+             
+             @struct RegionDefinition 
+             
+             <summary> Stores the region info. </summary>
+            
+        </member>
+        <member name="F:Dynamsoft.Barcode.RegionDefinition.RegionTop">
+            <summary> The top-most coordinate or percentage of the region.
+            
+            @par Value range:
+                    regionMeasuredByPercentage = 0, [0, 0x7fffffff]
+                    regionMeasuredByPercentage = 1, [0, 100]
+            @par Default value:
+                    0
+            </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.RegionDefinition.RegionLeft">
+            <summary> The left-most coordinate or percentage of the region. 
+            
+            @par Value range:
+                    regionMeasuredByPercentage = 0, [0, 0x7fffffff]
+                    regionMeasuredByPercentage = 1, [0, 100]
+            @par Default value:
+                    0
+            </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.RegionDefinition.RegionRight">
+            <summary> The right-most coordinate or percentage of the region.
+            
+            @par Value range:
+                    regionMeasuredByPercentage = 0, [0, 0x7fffffff]
+                    regionMeasuredByPercentage = 1, [0, 100]
+            @par Default value:
+                    0 
+            </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.RegionDefinition.RegionBottom">
+            <summary> The bottom-most coordinate or percentage of the region.
+            
+            @par Value range:
+                    regionMeasuredByPercentage = 0, [0, 0x7fffffff]
+                    regionMeasuredByPercentage = 1, [0, 100]
+            @par Default value:
+                    0 
+            </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.RegionDefinition.RegionMeasuredByPercentage">
+            <summary> Sets whether or not to use percentages to measure the Region size.
+            
+            @par Value range:
+                    [0, 1]
+            @par Default value:
+                    0 
+            @par Remarks:
+                When itos set to 1, the values of Top, Left, Right, Bottom indicates the percentage (from 0 to 100). Otherwise, they refer to the coordinates.
+                0: not by percentage
+                1: by percentage
+            </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.FurtherModes">
+            @struct FurtherModes 
+            
+            <summary> Stores the FurtherModes. </summary>
+            
+        </member>
+        <member name="F:Dynamsoft.Barcode.FurtherModes.ColourClusteringModes">
+             <summary> Sets the mode and priority for colour categorization. Not supported yet.
+            
+             @par Value range:
+             	     Each array item can be any one of the ColourClusteringMode Enumeration items.
+             @par Default value:
+             	    [CCM_SKIP,CCM_SKIP,CCM_SKIP,CCM_SKIP,CCM_SKIP,CCM_SKIP,CCM_SKIP,CCM_SKIP]
+             @par Remarks:
+            	     The array index represents the priority of the item. The smaller index is, the higher priority is.
+             @sa Dynamsoft.Barcode.EnumColourClusteringMode
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.FurtherModes.ColourConversionModes">
+             <summary> Sets the mode and priority for converting a colour image to a grayscale image.
+            
+             @par Value range:
+             	     Each array item can be any one of the ColourConversionMode Enumeration items.
+             @par Default value:
+             	    [CICM_GENERAL,CICM_SKIP,CICM_SKIP,CICM_SKIP,CICM_SKIP,CICM_SKIP,CICM_SKIP,CICM_SKIP]
+             @par Remarks:
+            	     The array index represents the priority of the item. The smaller index is, the higher priority is.
+             @sa Dynamsoft.Barcode.EnumColourConversionMode
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.FurtherModes.GrayscaleTransformationModes">
+             <summary> Sets the mode and priority for the grayscale image conversion.
+            
+             @par Value range:
+             	     Each array item can be any one of the GrayscaleTransformationMode Enumeration items.
+             @par Default value:
+             	    [GTM_ORIGINAL,GTM_SKIP,GTM_SKIP,GTM_SKIP,GTM_SKIP,GTM_SKIP,GTM_SKIP,GTM_SKIP]
+             @par Remarks:
+            	     The array index represents the priority of the item. The smaller index is, the higher priority is.
+             @sa Dynamsoft.Barcode.EnumGrayscaleTransformationMode
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.FurtherModes.RegionPredetectionModes">
+             <summary> Sets the region pre-detection mode for barcodes search.
+            
+             @par Value range:
+             	     Each array item can be any one of the RegionPredetectionMode Enumeration items.
+             @par Default value:
+             	    [RPM_GENERAL,RPM_SKIP,RPM_SKIP,RPM_SKIP,RPM_SKIP,RPM_SKIP,RPM_SKIP,RPM_SKIP]
+             @par Remarks:
+            	     The array index represents the priority of the item. The smaller index is, the higher priority is.
+            	     If the image is large and the barcode on the image is very small, it is recommended to enable region predetection to speed up the localization process and recognition accuracy.
+             @sa Dynamsoft.Barcode.EnumRegionPredetectionMode
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.FurtherModes.ImagePreprocessingModes">
+             <summary> Sets the mode and priority for image preprocessing algorithms.
+            
+             @par Value range:
+             	     Each array item can be any one of the ImagePreprocessingMode Enumeration items.
+             @par Default value:
+             	    [IPM_GENERAL,IPM_SKIP,IPM_SKIP,IPM_SKIP,IPM_SKIP,IPM_SKIP,IPM_SKIP,IPM_SKIP]
+             @par Remarks:
+            	     The array index represents the priority of the item. The smaller index is, the higher priority is.
+             @sa Dynamsoft.Barcode.EnumImagePreprocessingMode
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.FurtherModes.TextureDetectionModes">
+             <summary> Sets the mode and priority for texture detection.
+            
+             @par Value range:
+             	     Each array item can be any one of the TextureDetectionMode Enumeration items.
+             @par Default value:
+             	    [TDM_GENERAL_WIDTH_CONCENTRATION,TDM_SKIP,TDM_SKIP,TDM_SKIP,TDM_SKIP,TDM_SKIP,TDM_SKIP,TDM_SKIP]
+             @par Remarks:
+            	     The array index represents the priority of the item. The smaller index is, the higher priority is.
+             @sa Dynamsoft.Barcode.EnumTextureDetectionMode
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.FurtherModes.TextFilterModes">
+             <summary> Sets the mode and priority for text filter.
+            
+             @par Value range:
+             	     Each array item can be any one of the TextFilterMode Enumeration items.
+             @par Default value:
+             	    [TFM_GENERAL_CONTOUR,TFM_SKIP,TFM_SKIP,TFM_SKIP,TFM_SKIP,TFM_SKIP,TFM_SKIP,TFM_SKIP]
+             @par Remarks:
+            	     The array index represents the priority of the item. The smaller index is, the higher priority is.
+                  If the image contains a lot of text, you can enable text filter to speed up the localization process.
+             @sa Dynamsoft.Barcode.EnumTextFilterMode
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.FurtherModes.TextAssistedCorrectionMode">
+             <summary> Sets the mode of text assisted correction for barcode decoding. Not supported yet.
+            
+             @par Value range:
+             	     Any one of the TextAssistedCorrectionMode Enumeration items
+             @par Default value:
+             	    TACM_VERIFYING
+             @sa Dynamsoft.Barcode.EnumTextAssistedCorrectionMode
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.FurtherModes.DPMCodeReadingModes">
+             <summary> Sets the mode and priority for DPM code reading.
+            
+             @par Value range:
+             	     Each array item can be any one of the ColourConversionMode Enumeration items.
+             @par Default value:
+             	    [DPMCRM_SKIP,DPMCRM_SKIP,DPMCRM_SKIP,DPMCRM_SKIP,DPMCRM_SKIP,DPMCRM_SKIP,DPMCRM_SKIP,DPMCRM_SKIP]
+             @par Remarks:
+            	     The array index represents the priority of the item. The smaller index is, the higher priority is.
+             @sa Dynamsoft.Barcode.EnumDPMCodeReadingMode
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.FurtherModes.DeformationResistingModes">
+             <summary> Sets the mode and priority for deformation resisting. Not supported yet.
+            
+             @par Value range:
+             	     Each array item can be any one of the DeformationResistingMode Enumeration items.
+             @par Default value:
+             	    [DRM_SKIP,DRM_SKIP,DRM_SKIP,DRM_SKIP,DRM_SKIP,DRM_SKIP,DRM_SKIP,DRM_SKIP]
+             @par Remarks:
+            	     The array index represents the priority of the item. The smaller index is, the higher priority is.
+             @sa Dynamsoft.Barcode.EnumDeformationResistingMode
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.FurtherModes.BarcodeComplementModes">
+             <summary> Sets the mode and priority to complement the missing parts in the barcode. Not supported yet.
+            
+             @par Value range:
+             	     Each array item can be any one of the BarcodeComplementMode Enumeration items
+             @par Default value:
+             	    [BCM_SKIP,BCM_SKIP,BCM_SKIP,BCM_SKIP,BCM_SKIP,BCM_SKIP,BCM_SKIP,BCM_SKIP]
+             @par Remarks:
+            	     The array index represents the priority of the item. The smaller index is, the higher priority is.
+             @sa Dynamsoft.Barcode.EnumBarcodeComplementMode
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.FurtherModes.BarcodeColourModes">
+             <summary> Sets the mode and priority for the barcode colour mode used to process the barcode zone.
+            
+             @par Value range:
+             	     Each array item can be any one of the BarcodeColourMode Enumeration items
+             @par Default value:
+             	    [BICM_DARK_ON_LIGHT,BICM_SKIP,BICM_SKIP,BICM_SKIP,BICM_SKIP,BICM_SKIP,BICM_SKIP,BICM_SKIP]
+             @par Remarks:
+            	     The array index represents the priority of the item. The smaller index is, the higher priority is.
+             @sa Dynamsoft.Barcode.EnumBarcodeColourMode
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.FurtherModes.AccompanyingTextRecognitionModes">
+             <summary> Sets the mode and priority to recognize accompanying text.
+            
+             @par Value range:
+             	     Each array item can be any one of the AccompanyingTextRecognitionMode Enumeration items
+             @par Default value:
+             	    [ATRM_SKIP,ATRM_SKIP,ATRM_SKIP,ATRM_SKIP,ATRM_SKIP,ATRM_SKIP,ATRM_SKIP,ATRM_SKIP]
+             @par Remarks:
+            	     The array index represents the priority of the item. The smaller index is, the higher priority is.
+             @sa Dynamsoft.Barcode.EnumAccompanyingTextRecognitionMode
+             </summary>
+        </member>
+        <member name="F:Dynamsoft.Barcode.FurtherModes.Reserved">
+            <summary> Reserved memory for struct. The length of this array indicates the size of the memory reserved for this struct. </summary>
+        </member>
+        <member name="T:Dynamsoft.Barcode.Resource">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.Resource.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.Resource.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.Resource.DynamicPdf">
+            <summary>
+              Looks up a localized resource of type System.Byte[].
+            </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.Resource.DynamicPdfx64">
+            <summary>
+              Looks up a localized resource of type System.Byte[].
+            </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.Resource.DynamsoftBarcodeReaderx64">
+            <summary>
+              Looks up a localized resource of type System.Byte[].
+            </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.Resource.DynamsoftBarcodeReaderx86">
+            <summary>
+              Looks up a localized resource of type System.Byte[].
+            </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.Resource.DynamsoftLicClientx64">
+            <summary>
+              Looks up a localized resource of type System.Byte[].
+            </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.Resource.DynamsoftLicClientx86">
+            <summary>
+              Looks up a localized resource of type System.Byte[].
+            </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.Resource.vcomp110x64">
+            <summary>
+              Looks up a localized resource of type System.Byte[].
+            </summary>
+        </member>
+        <member name="P:Dynamsoft.Barcode.Resource.vcomp110x86">
+            <summary>
+              Looks up a localized resource of type System.Byte[].
+            </summary>
+        </member>
+    </members>
+</doc>
