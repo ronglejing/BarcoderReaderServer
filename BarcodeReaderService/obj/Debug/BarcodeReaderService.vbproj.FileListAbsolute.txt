@@ -1,0 +1,10 @@
+E:\Csharp\2020\BarcoderReaderServer\BarcodeReaderService\bin\Debug\BarcodeReaderService.exe.config
+E:\Csharp\2020\BarcoderReaderServer\BarcodeReaderService\bin\Debug\BarcodeReaderService.exe
+E:\Csharp\2020\BarcoderReaderServer\BarcodeReaderService\bin\Debug\BarcodeReaderService.pdb
+E:\Csharp\2020\BarcoderReaderServer\BarcodeReaderService\bin\Debug\BarcodeReaderService.xml
+E:\Csharp\2020\BarcoderReaderServer\BarcodeReaderService\obj\Debug\BarcodeReaderService.vbprojAssemblyReference.cache
+E:\Csharp\2020\BarcoderReaderServer\BarcodeReaderService\obj\Debug\BarcodeReaderService.Resources.resources
+E:\Csharp\2020\BarcoderReaderServer\BarcodeReaderService\obj\Debug\BarcodeReaderService.vbproj.GenerateResource.cache
+E:\Csharp\2020\BarcoderReaderServer\BarcodeReaderService\obj\Debug\BarcodeReaderService.exe
+E:\Csharp\2020\BarcoderReaderServer\BarcodeReaderService\obj\Debug\BarcodeReaderService.xml
+E:\Csharp\2020\BarcoderReaderServer\BarcodeReaderService\obj\Debug\BarcodeReaderService.pdb

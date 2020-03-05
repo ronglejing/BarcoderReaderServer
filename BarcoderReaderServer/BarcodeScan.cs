@@ -78,6 +78,7 @@ namespace BarcoderReaderServer
         public string GetResult(Stream stream)
         {
             int index = 0;
+            int retryCount = 0;
 
             try
             {
@@ -114,6 +115,11 @@ namespace BarcoderReaderServer
                         {
                             Thread.Sleep(10);
                             index = 0;
+                            retryCount++;
+                            if (retryCount >= 3000)//等待30S后服务器超时
+                            {
+                                return null;
+                            }
                         }
                     }
                 } while (true);

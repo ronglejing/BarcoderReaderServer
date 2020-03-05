@@ -19,7 +19,7 @@ namespace BarcoderReaderServer
             try
             {
                 httpListener = new HttpListener();
-                httpListener.Prefixes.Add("http://+:8081/");
+                httpListener.Prefixes.Add("http://+:8080/");
                 httpListener.Start();
                 httpListener.BeginGetContext(HttpListenerAsyncCallbackHadle, null);
                 IPHostEntry IpEntry = Dns.GetHostEntry(Dns.GetHostName());
@@ -53,6 +53,10 @@ namespace BarcoderReaderServer
                 try
                 {
                     string result = barcodeScan.GetResult(context.Request.InputStream);
+                    if (result == null)
+                    {
+                        return;
+                    }
                     var returnByteArr = Encoding.UTF8.GetBytes(result);
                     context.Response.ContentType = "application/json; charset=UTF-8";
                     using (var stream = context.Response.OutputStream)

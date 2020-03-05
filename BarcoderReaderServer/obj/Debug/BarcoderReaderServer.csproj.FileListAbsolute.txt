@@ -21,3 +21,5 @@ E:\Csharp\2020\BarcoderReaderServer\BarcoderReaderServer\bin\Debug\Newtonsoft.Js
 E:\Csharp\2020\BarcoderReaderServer\BarcoderReaderServer\bin\Debug\Dynamsoft.BarcodeReader.xml
 E:\Csharp\2020\BarcoderReaderServer\BarcoderReaderServer\bin\Debug\Newtonsoft.Json.xml
 E:\Csharp\2020\BarcoderReaderServer\BarcoderReaderServer\obj\Debug\BarcoderReaderServer.csproj.CopyComplete
+E:\Csharp\2020\BarcoderReaderServer\BarcoderReaderServer\bin\Debug\log4net.dll
+E:\Csharp\2020\BarcoderReaderServer\BarcoderReaderServer\bin\Debug\log4net.xml
